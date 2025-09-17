@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能车学习指南</title>
+    <style>
+        /* 全局样式 */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --light-bg: #f9f9f9;
+            --card-bg: #fff;
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            background-image: 
+                radial-gradient(var(--primary-color) 0.5px, transparent 0.5px),
+                radial-gradient(var(--primary-color) 0.5px, var(--light-bg) 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            background-attachment: fixed;
+            padding: 0;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="white" fill-opacity="0.05" /></svg>');
+            animation: moveBackground 60s linear infinite;
+        }
+        
+        @keyframes moveBackground {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 1000px; }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+        }
+        
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        /* 容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* 列表样式 */
+        ul, ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.8rem;
+            position: relative;
+        }
+        
+        .task-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .task-list li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .task-list li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-size: 0.8rem;
+        }
+        
+        /* 链接样式 */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+            border-bottom: 1px solid transparent;
+        }
+        
+        a:hover {
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--accent-color);
+        }
+        
+        /* 强调样式 */
+        strong {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .note {
+            font-style: italic;
+            color: #666;
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 0.5rem 1rem;
+            border-left: 4px solid var(--primary-color);
+            margin: 1rem 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        /* 响应式设计 */
+        @media (min-width: 768px) {
+            .main-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .main-content {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 767px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            h3 {
+                font-size: 1.2rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <h1>智能车学习指南</h1>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main class="main-content">
+            <section class="card full-width">
+                <h2>比赛规则与平台</h2>
+                <ul>
+                    <li><strong>规则见：</strong> <a href="https://blog.csdn.net/zhuoqingjokin/article/details/135934572" target="_blank">第十九届全国大学生智能汽车竞速比赛规则（讨论稿）-CSDN博客</a></li>
+                    <li><strong>完全模型细则：</strong> <a href="https://blog.csdn.net/zhuoqingjokin/article/details/136004990" target="_blank">第十九届全国大学生智能汽车竞赛-竞速比赛模型组比赛细则-CSDN博客</a></li>
+                    <li><strong>车模平台：</strong> <a href="https://blog.csdn.net/zhuoqingjokin/article/details/136040334" target="_blank">第十九届全国大学生智能汽车竞赛车模信息-CSDN博客</a></li>
+                </ul>
+            </section>
+
+            <section class="card full-width">
+                <h2>教程区</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                    <a href="https://www.bilibili.com/video/BV1U5411L74A/" target="_blank" class="card" style="height: auto; margin: 0;">
+                        <h3 style="margin-top: 0;">看36个电路图上</h3>
+                        <p>哔哩哔哩视频教程</p>
+                    </a>
+                    <a href="https://www.bilibili.com/video/BV1z4411B721/" target="_blank" class="card" style="height: auto; margin: 0;">
+                        <h3 style="margin-top: 0;">立创EDA最新教学视频</h3>
+                        <p>立创课堂</p>
+                    </a>
+                    <a href="https://www.bilibili.com/video/BV1hA411g7k8/" target="_blank" class="card" style="height: auto; margin: 0;">
+                        <h3 style="margin-top: 0;">立创EDA快速入门</h3>
+                        <p>电路设计与制作</p>
+                    </a>
+                    <a href="https://www.bilibili.com/video/BV1Ds411a7Zo/" target="_blank" class="card" style="height: auto; margin: 0;">
+                        <h3 style="margin-top: 0;">AuTop算法改进思路</h3>
+                        <p>NUIST SCC第一次算法培训</p>
+                    </a>
+                    <a href="https://www.bilibili.com/video/BV1sW41167b2/" target="_blank" class="card" style="height: auto; margin: 0;">
+                        <h3 style="margin-top: 0;">摄像头数字图像处理算法</h3>
+                        <p>智能车制作加餐</p>
+                    </a>
+                    <a href="https://aistudio.baidu.com/projectdetail/662587" target="_blank" class="card" style="height: auto; margin: 0;">
+                        <h3 style="margin-top: 0;">零基础实践深度学习</h3>
+                        <p>飞桨AI Studio星河社区</p>
+                    </a>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>答疑区</h2>
+                <p class="note">有问题可留言</p>
+                <ul class="task-list">
+                    <li><strong>大几可以参加比赛？</strong> 任何年级都可以。</li>
+                    <li><strong>每年都可以参加吗？</strong> 是的。</li>
+                    <li><strong>有老师指导吗？</strong> 有。</li>
+                    <li><strong>完成比赛大约花费多少经费？</strong> 约1万元。</li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h2>硬件组</h2>
+                <p class="note">立创EDA每月2次免费打样</p>
+                <h3>任务一：直流电机驱动板制作</h3>
+                <ul class="task-list">
+                    <li>输入电压为12V。</li>
+                    <li>进行电气隔离，将控制器与驱动电路隔离开，防止损坏控制器。</li>
+                    <li>进行GND分割，避免信号干扰。</li>
+                    <li><strong>发挥部分：</strong> 支持电流采样，并进行电流闭环。</li>
+                </ul>
+                <h3>任务二：最小系统板绘制</h3>
+                <ul class="task-list">
+                    <li>输入电源为12V。</li>
+                    <li>芯片型号为意向组别的芯片型号。</li>
+                    <li>引出电机PWM输出以及舵机PWM输出端子。</li>
+                    <li>提供屏幕接口。</li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h2>电控组</h2>
+                <h3>任务一：学习单片机</h3>
+                <ul class="task-list">
+                    <li>限定使用STM系列或GD系列单片机。</li>
+                    <li>完成ADC+DMA多通道读取。</li>
+                    <li>完成单个定时器输出多路占空比可调的PWM（发挥：频率也可调）。</li>
+                    <li>学习IIC、CAN等通讯协议，完成IIC驱动OLED屏。</li>
+                    <li>设计一个调参UI，可使用菜单调整PID参数。</li>
+                    <li>学习前后台或RTOS，提高系统的实时性（如在按键检测时不影响其他任务的运行）。</li>
+                </ul>
+                <h3>任务二：控制算法</h3>
+                <ul class="task-list">
+                    <li>在Matlab上实现一个一阶倒立摆模型的控制（可使用串级PID, LQR, MPC等方法）。</li>
+                    <li>制作一个两轮平衡小车，实现电磁循迹或摄像头循迹。</li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h2>视觉组</h2>
+                <ul class="task-list">
+                    <li>学习相机的逆透视以及去畸变方法及标定，并使用OpenCV实现。</li>
+                    <li>学习二值化算法，并使用OpenCV实现。</li>
+                    <li>学习寻线以及元素识别算法。</li>
+                    <li>完成路径规划。</li>
+                    <li>完成一辆摄像头循迹小车。</li>
+                </ul>
+                <h3>测评方式</h3>
+                <p>提供若干张图片，基于OpenCV完成二值化、边界提取、中线拟合、元素判断。</p>
+                <p><strong>图片集链接：</strong> <a href="https://pan.baidu.com/s/12ctrjQg2elN5mdcpv1PnMw?pwd=rml9" target="_blank">百度网盘链接</a>（提取码: rml9）</p>
+            </section>
+
+            <section class="card">
+                <h2>AI组</h2>
+                <ul class="task-list">
+                    <li>使用Pytorch、TensorFlow或PaddlePaddle完成波士顿房价预测任务。</li>
+                    <li>构建手写数字识别网络完成数字识别。</li>
+                    <li>全流程跑通YOLO，部署到电脑实时运行，完成红蓝锥桶检测。（数据集可在AI Studio平台下载）</li>
+                    <li>提交AI Studio平台的线上赛测评。</li>
+                </ul>
+                <p><strong>锥桶数据集：</strong> <a href="https://aistudio.baidu.com/datasetdetail/111221" target="_blank">飞桨AI Studio数据集</a></p>
+            </section>
+
+            <section class="card full-width">
+                <h2>ROS组</h2>
+                <h3>任务重点：ROS节点的发布与订阅</h3>
+                <h3>目标</h3>
+                <ol class="task-list">
+                    <li>搭建 ROS 2 Humble Hawksbill 环境。(10分)</li>
+                    <li>创建一个 ROS 2 包，包含三个节点：(共60分)
+                        <ul>
+                            <li><strong>节点1 (Image Publisher):</strong> 发布带有色带小球的图片数据。(10分)</li>
+                            <li><strong>节点2 (Image Processor & Publisher):</strong> 接收图片数据，执行颜色识别和边界绘制，然后发布处理后的数据。(20分)</li>
+                            <li><strong>节点3 (Image Consumer):</strong> 订阅节点2的数据，执行一个特定功能（例如计数图像中小球的数量）。(30分)</li>
+                        </ul>
+                    </li>
+                    <li>提交工作空间，编写任务三说明文档（<strong>必须项</strong>，写了不加分，不写则任务三不得分）。</li>
+                </ol>
+                <h3>要求</h3>
+                <ul class="task-list">
+                    <li>需要在 Ubuntu 操作系统下安装 ROS 2 Humble Hawksbill。</li>
+                    <li>将颜色识别和边界绘制的 Python 代码转换为 ROS 2 节点。</li>
+                    <li>代码具有清晰的注释，说明每个节点的功能。(额外+20分)</li>
+                    <li>节点间的通信应使用适当的 ROS 2 接口类型（如 sensor_msgs/msg/Image）。</li>
+                    <li>代码内编写一个 README 文件，说明如何构建 ROS 2 包和运行节点。(额外+10分)</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 智能车学习指南 | 版权归属于兰州理工大学智能车协会和兰州理工大学电子设计协会</p>
+        </div>
+    </footer>
+</body>
+</html>
